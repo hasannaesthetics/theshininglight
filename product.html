@@ -3,235 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Shining Light | Premium Islamic Artistry</title>
+    <title>Product Details | The Shining Light</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-      :root { --primary: #4b593e; --accent: #c5a059; --bg: #fdfcf8; --text: #2c2c2c; --white: #ffffff; --shadow: 0 10px 40px rgba(0, 0, 0, 0.08); --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; scroll-behavior: smooth; overflow-x: hidden; }
-      h1, h2, h3, .serif { font-family: "Playfair Display", serif; }
-      header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
-      nav { max-width: 1300px; margin: 0 auto; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-      .logo-container { height: 70px; display: flex; align-items: center; }
-      .logo-img { height: 100%; width: auto; cursor: pointer; }
-      .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-      .nav-links a { text-decoration: none; color: var(--text); font-weight: 500; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; transition: var(--transition); }
-      .nav-links a:hover { color: var(--primary); }
-      .nav-actions { display: flex; align-items: center; gap: 1.5rem; }
-      .search-bar { display: flex; align-items: center; gap: 0.5rem; background: white; padding: 0.6rem 1rem; border-radius: 50px; border: 1px solid #e0e0e0; transition: var(--transition); }
-      .search-bar input { border: none; background: transparent; outline: none; width: 180px; font-size: 0.9rem; }
-      .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 2001; }
-      .hamburger span { display: block; width: 25px; height: 2px; background: var(--primary); }
-      .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 300px; height: 100vh; background: var(--white); z-index: 2000; display: flex; flex-direction: column; padding: 100px 40px; gap: 2rem; box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05); transition: 0.5s; }
-      .mobile-menu.active { right: 0; }
-      .cart-btn { background: var(--primary); color: white; padding: 10px 20px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600; border: none; font-size: 0.9rem; transition: var(--transition); }
-      .cart-badge { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #d4533e; color: white; border-radius: 50%; font-size: 0.75rem; }
-      .hero { padding: 220px 20px 100px; text-align: center; background: linear-gradient(to bottom, #f3f5f1, var(--bg)); }
-      .hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); color: var(--primary); }
-      .about-section { background: var(--white); padding: 100px 20px; border-bottom: 1px solid #f0f0f0; text-align: center; }
-      .container { max-width: 1300px; margin: 0 auto; padding: 4rem 2rem; }
-      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 3rem; }
-      .card { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); text-align: center; padding-bottom: 1.5rem; position: relative; }
-      .card:hover { transform: translateY(-10px); }
-      .card-img { width: 100%; aspect-ratio: 1; object-fit: cover; }
-      .sidebar { position: fixed; right: -480px; top: 0; width: 420px; height: 100vh; background: white; z-index: 2100; box-shadow: -15px 0 50px rgba(0, 0, 0, 0.1); transition: 0.6s; padding: 4rem 2.5rem; display: flex; flex-direction: column; overflow-y: auto; }
-      .sidebar.active { right: 0; }
-      .cart-item { display: flex; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid #f9f9f9; padding-bottom: 1rem; }
-      .checkout-btn { width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 1rem; }
-      .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 3000; display: none; align-items: center; justify-content: center; }
-      .modal-content { background: white; padding: 2.5rem; border-radius: 20px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; }
-      .form-group { margin-bottom: 1.5rem; text-align: left; }
-      .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-      .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; }
-      .form-error { color: #d4533e; font-size: 0.85rem; display: none; }
-      .form-group.error .form-error { display: block; }
-      footer { background: var(--primary); color: white; padding: 3rem 2rem; margin-top: 4rem; text-align: center; }
-      @media (max-width: 1024px) { .nav-links, .search-bar { display: none; } .hamburger { display: flex; } }
-      @media (max-width: 768px) { .sidebar { width: 100%; } }
+      :root { --primary: #4b593e; --accent: #c5a059; --bg: #fdfcf8; --text: #2c2c2c; --white: #ffffff; }
+      body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+      .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+      .serif { font-family: "Playfair Display", serif; }
+      .btn { display: inline-block; background: var(--primary); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; }
+      .price { font-size: 2rem; color: var(--accent); font-weight: 600; margin: 20px 0; }
+      .img-main { width: 100%; border-radius: 15px; margin-bottom: 20px; }
+      .back-link { display: block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: 600; }
     </style>
   </head>
   <body>
-    <header>
-      <nav>
-        <div class="logo-container">
-          <img src="logo.png" alt="Logo" class="logo-img" onclick="window.location.href = 'index.html'" />
-        </div>
-        <ul class="nav-links">
-          <li><a href="#shop">Shop</a></li>
-          <li><a href="#about">About</a></li>
-        </ul>
-        <div class="nav-actions">
-          <button class="cart-btn" onclick="toggleCart()">
-            Cart <span class="cart-badge" id="cart-count">0</span>
-          </button>
-        </div>
-        <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
-      </nav>
-      <div class="mobile-menu" id="mobile-menu">
-        <a href="#shop" onclick="toggleMobileMenu()">Shop</a>
-        <a href="#about" onclick="toggleMobileMenu()">About</a>
-        <button class="cart-btn" onclick="toggleCart(); toggleMobileMenu()">Cart</button>
-      </div>
-    </header>
-
-    <main>
-      <section class="hero">
-        <div style="font-size: 4rem; margin-bottom: 1rem; letter-spacing: 2px">نور</div>
-        <h1 class="serif">The Shining Light</h1>
-        <p>Handcrafted Islamic artistry & heritage pieces</p>
-      </section>
-
-      <section class="about-section" id="about">
-        <div class="container" style="max-width:800px">
-          <h2 class="serif">About Us</h2>
-          <p>We believe in quality craftsmanship and cultural appreciation, bringing authentic elegance into your space.</p>
-        </div>
-      </section>
-
-      <section id="shop" class="container">
-        <h2 class="serif" style="margin-bottom: 2rem; text-align: center">Our Collection</h2>
-        <div id="product-grid" class="grid"></div>
-      </section>
-    </main>
-
-    <!-- Cart Sidebar -->
-    <div class="sidebar" id="cart-sidebar">
-      <h2 class="serif" style="margin-bottom: 2rem">Your Cart</h2>
-      <div id="cart-items"></div>
-      <div style="border-top: 2px solid #eee; padding-top: 1rem">
-        <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 600">
-          <span>Total:</span> <span id="cart-total">$0.00</span>
-        </div>
-        <button class="checkout-btn" id="checkout-btn" onclick="showCheckout()" disabled>Checkout</button>
-        <button class="checkout-btn" style="background:#999" onclick="toggleCart()">Close</button>
+    <div class="container">
+      <a href="index.html" class="back-link">← Back to Shop</a>
+      <div id="product-content">
+        <p>Loading product...</p>
       </div>
     </div>
-
-    <!-- Checkout Modal -->
-    <div class="modal-overlay" id="checkout-modal">
-      <div class="modal-content">
-        <h2 class="serif" style="margin-bottom: 1.5rem">Checkout</h2>
-        <div id="order-summary" style="background: #f9f9f9; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem"></div>
-        <form id="checkout-form" onsubmit="return false">
-          <div class="form-group">
-            <label>Full Name *</label>
-            <input type="text" id="cust-name" required />
-            <span class="form-error">Required</span>
-          </div>
-          <div class="form-group">
-            <label>WhatsApp Number *</label>
-            <input type="text" id="cust-phone" placeholder="e.g. 6590106263" required />
-            <span class="form-error">Required</span>
-          </div>
-          <div class="form-group">
-            <label>Delivery Address *</label>
-            <textarea id="cust-addr" rows="3" required></textarea>
-            <span class="form-error">Required</span>
-          </div>
-          <button type="button" class="checkout-btn" onclick="confirmOrder()">Send Order via WhatsApp</button>
-          <button type="button" class="checkout-btn" style="background:#999" onclick="hideModals()">Cancel</button>
-        </form>
-      </div>
-    </div>
-
-    <footer>
-      <p>&copy; 2025 The Shining Light. WhatsApp: +65 9010 6263</p>
-    </footer>
 
     <script>
       const SUPABASE_URL = 'https://sappkfchokaixfmmsotv.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhcHBrZmNob2thaXhmbW1zb3R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MzgxMTAsImV4cCI6MjA5MTMxNDExMH0.L-qETu03IZLqEhJoEx3Jy36JSDIxBg8hjhz4SYiMZYI';
-      const WHATSAPP_PHONE = '6590106263'; // Numbers only
+      const WHATSAPP_PHONE = '6590106263';
 
       const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      let allProducts = [];
-      let cart = [];
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id');
 
-      async function fetchProducts() {
-        const { data } = await supabaseClient.from('products').select('*');
-        allProducts = data || [];
-        renderProducts();
-      }
+      async function loadProduct() {
+        const { data, error } = await supabaseClient.from('products').select('*').eq('id', productId).single();
+        if (error || !data) {
+          document.getElementById('product-content').innerHTML = "<p>Product not found.</p>";
+          return;
+        }
 
-      function renderProducts() {
-        const grid = document.getElementById('product-grid');
-        grid.innerHTML = allProducts.map(p => `
-          <div class="card">
-            <img src="${Array.isArray(JSON.parse(p.img || '[]')) ? JSON.parse(p.img)[0] : p.img}" class="card-img" onclick="window.location.href='product.html?id=${p.id}'">
-            <div style="padding: 1.5rem">
-              <h3 class="serif">${p.name}</h3>
-              <p style="color:var(--accent); font-weight:600">$${p.price.toFixed(2)}</p>
-              <button class="cart-btn" style="width:100%; margin-top:1rem; justify-content:center" onclick="addToCart(${p.id})">Add to Cart</button>
-            </div>
+        const images = JSON.parse(data.img || '[]');
+        const displayImg = Array.isArray(images) ? images[0] : data.img;
+
+        document.getElementById('product-content').innerHTML = `
+          <h1 class="serif" style="font-size: 2.5rem">${data.name}</h1>
+          <img src="${displayImg}" class="img-main">
+          <p class="price">$${data.price.toFixed(2)}</p>
+          <p>${data.description || 'No description available.'}</p>
+          <div style="margin-top: 30px">
+            <button class="btn" onclick="orderNow('${data.name}', ${data.price})">Order on WhatsApp</button>
           </div>
-        `).join('');
+        `;
       }
 
-      function addToCart(id) {
-        const p = allProducts.find(x => x.id === id);
-        const exists = cart.find(x => x.id === id);
-        if (exists) exists.qty++; else cart.push({...p, qty: 1});
-        updateCartDisplay();
-        if(window.innerWidth > 768) document.getElementById('cart-sidebar').classList.add('active');
-      }
-
-      function updateCartDisplay() {
-        const list = document.getElementById('cart-items');
-        let total = 0;
-        list.innerHTML = cart.map(i => {
-          total += i.price * i.qty;
-          return `<div class="cart-item">
-            <div><b>${i.name}</b><br><small>${i.qty} x $${i.price}</small></div>
-            <button onclick="removeFromCart(${i.id})" style="border:none; color:red; background:none; cursor:pointer">✕</button>
-          </div>`;
-        }).join('');
-        document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
-        document.getElementById('cart-count').textContent = cart.reduce((a, b) => a + b.qty, 0);
-        document.getElementById('checkout-btn').disabled = cart.length === 0;
-      }
-
-      function removeFromCart(id) {
-        cart = cart.filter(x => x.id !== id);
-        updateCartDisplay();
-      }
-
-      function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
-      function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('active'); }
-      function hideModals() { document.getElementById('checkout-modal').style.display = 'none'; }
-
-      function showCheckout() {
-        let summaryHtml = cart.map(i => `<div style="display:flex; justify-content:space-between"><span>${i.name} x ${i.qty}</span><span>$${(i.price*i.qty).toFixed(2)}</span></div>`).join('');
-        document.getElementById('order-summary').innerHTML = summaryHtml + `<hr><div style="display:flex; justify-content:space-between; font-weight:bold"><span>Total</span><span>${document.getElementById('cart-total').textContent}</span></div>`;
-        document.getElementById('checkout-modal').style.display = 'flex';
-      }
-
-      async function confirmOrder() {
-        const name = document.getElementById('cust-name').value;
-        const phone = document.getElementById('cust-phone').value;
-        const addr = document.getElementById('cust-addr').value;
-
-        if(!name || !phone || !addr) { alert('Please fill all fields'); return; }
-
-        let msg = `*New Order from The Shining Light*\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Address:* ${addr}\n\n*Items:*\n`;
-        cart.forEach(i => msg += `- ${i.name} x ${i.qty} ($${(i.price*i.qty).toFixed(2)})\n`);
-        msg += `\n*Total:* ${document.getElementById('cart-total').textContent}`;
-
-        // OPEN WHATSAPP IMMEDIATELY
+      function orderNow(name, price) {
+        const msg = `Hi! I'm interested in purchasing:\n\n*${name}*\nPrice: $${price.toFixed(2)}\n\nPlease let me know the shipping details.`;
         window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
-
-        // Optional: Save to DB in background
-        try {
-          await supabaseClient.from('orders').insert([{ customer_name: name, phone: phone, address: addr, items: JSON.stringify(cart), total: cart.reduce((a,b)=>a+(b.price*b.qty),0) }]);
-        } catch(e) {}
-
-        cart = [];
-        updateCartDisplay();
-        hideModals();
-        toggleCart();
       }
 
-      fetchProducts();
+      if(productId) loadProduct();
     </script>
   </body>
 </html>
