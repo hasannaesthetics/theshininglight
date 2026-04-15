@@ -59,149 +59,149 @@
         <button class="cart-btn" onclick="toggleCart(); toggleMobileMenu()">View Cart</button>
       </div>
     </header>
+<main>
+  <section class="hero">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">نور</div>
+    <h1 class="serif" style="font-size: 3rem;">The Shining Light</h1>
+    <p>Premium Islamic Artistry & Heritage</p>
+  </section>
 
-    <main>
-      <section class="hero">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">نور</div>
-        <h1 class="serif" style="font-size: 3rem;">The Shining Light</h1>
-        <p>Premium Islamic Artistry & Heritage</p>
-      </section>
+  <section id="shop" class="container">
+    <div id="product-grid" class="grid"></div>
+  </section>
+</main>
 
-      <section id="shop" class="container">
-        <div id="product-grid" class="grid"></div>
-      </section>
-    </main>
-
-    <div class="sidebar" id="cart-sidebar">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 class="serif">Your Cart</h2>
-        <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">✕</button>
-      </div>
-      <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
-      <div style="border-top:1px solid #eee; padding-top:20px;">
-        <div style="display:flex; justify-content:space-between; font-weight:600; font-size:1.2rem; margin-bottom:20px;">
-          <span>Total:</span> <span id="cart-total">$0.00</span>
-        </div>
-        <button class="cart-btn" style="width:100%; justify-content:center; padding:15px;" id="checkout-btn" onclick="showCheckout()" disabled>Proceed to Checkout</button>
-      </div>
+<div class="sidebar" id="cart-sidebar">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2 class="serif">Your Cart</h2>
+    <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">✕</button>
+  </div>
+  <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
+  <div style="border-top:1px solid #eee; padding-top:20px;">
+    <div style="display:flex; justify-content:space-between; font-weight:600; font-size:1.2rem; margin-bottom:20px;">
+      <span>Total:</span> <span id="cart-total">$0.00</span>
     </div>
+    <button class="cart-btn" style="width:100%; justify-content:center; padding:15px;" id="checkout-btn" onclick="showCheckout()" disabled>Proceed to Checkout</button>
+  </div>
+</div>
 
-    <div class="modal-overlay" id="checkout-modal">
-      <div class="modal-content">
-        <h2 class="serif" style="margin-bottom:20px;">Checkout</h2>
-        <div id="order-items-list" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:20px; font-size:0.9rem;"></div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="cust-name" placeholder="Name" />
-        </div>
-        <div class="form-group">
-          <label>WhatsApp Number</label>
-          <input type="text" id="cust-phone" placeholder="e.g. 6590106263" />
-        </div>
-        <div class="form-group">
-          <label>Address</label>
-          <textarea id="cust-addr" rows="3" placeholder="Full Address"></textarea>
-        </div>
-        <button class="cart-btn" style="width:100%; justify-content:center; padding:15px;" onclick="confirmOrder()">Send via WhatsApp</button>
-        <button onclick="hideModals()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer; color:#777;">Back to Cart</button>
-      </div>
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-content">
+    <h2 class="serif" style="margin-bottom:20px;">Checkout</h2>
+    <div id="order-items-list" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:20px; font-size:0.9rem;"></div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="cust-name" placeholder="Name" />
     </div>
+    <div class="form-group">
+      <label>WhatsApp Number</label>
+      <input type="text" id="cust-phone" placeholder="e.g. 6590106263" />
+    </div>
+    <div class="form-group">
+      <label>Address</label>
+      <textarea id="cust-addr" rows="3" placeholder="Full Address"></textarea>
+    </div>
+    <button class="cart-btn" style="width:100%; justify-content:center; padding:15px;" onclick="confirmOrder()">Send via WhatsApp</button>
+    <button onclick="hideModals()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer; color:#777;">Back to Cart</button>
+  </div>
+</div>
 
-    <footer>
-      <p>&copy; 2025 The Shining Light. WhatsApp: +65 9010 6263</p>
-    </footer>
+<footer>
+  <p>&copy; 2025 The Shining Light. WhatsApp: +65 9010 6263</p>
+</footer>
 
-    <script>
-      const SUPABASE_URL = 'https://sappkfchokaixfmmsotv.supabase.co';
-      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhcHBrZmNob2thaXhmbW1zb3R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MzgxMTAsImV4cCI6MjA5MTMxNDExMH0.L-qETu03IZLqEhJoEx3Jy36JSDIxBg8hjhz4SYiMZYI';
-      const WHATSAPP_PHONE = '6590106263'; // NO PLUS SIGN
+<script>
+  const SUPABASE_URL = 'https://sappkfchokaixfmmsotv.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhcHBrZmNob2thaXhmbW1zb3R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MzgxMTAsImV4cCI6MjA5MTMxNDExMH0.L-qETu03IZLqEhJoEx3Jy36JSDIxBg8hjhz4SYiMZYI';
+  const WHATSAPP_PHONE = '6590106263'; // NO PLUS SIGN
 
-      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      let products = [];
-      let cart = [];
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let products = [];
+  let cart = [];
 
-      async function fetchProducts() {
-        const { data, error } = await supabaseClient.from('products').select('*').order('id');
-        if (data) { products = data; renderProducts(); }
-      }
+  async function fetchProducts() {
+    const { data, error } = await supabaseClient.from('products').select('*').order('id');
+    if (data) { products = data; renderProducts(); }
+  }
 
-      function renderProducts() {
-        const grid = document.getElementById('product-grid');
-        grid.innerHTML = products.map(p => {
-          let imgUrl = 'https://via.placeholder.com/400';
-          try {
-            const parsed = JSON.parse(p.img);
-            imgUrl = Array.isArray(parsed) ? parsed[0] : p.img;
-          } catch(e) { imgUrl = p.img; }
-          
-          return `
-            <div class="card">
-              <img src="${imgUrl}" class="card-img" onclick="window.location.href='product.html?id=${p.id}'">
-              <div style="padding:20px;">
-                <h3 class="serif">${p.name}</h3>
-                <p style="color:var(--accent); font-weight:600; margin:10px 0;">$${p.price.toFixed(2)}</p>
-                <button class="cart-btn" style="width:100%; justify-content:center;" onclick="addToCart(${p.id})">Add to Cart</button>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
+  function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = products.map(p => {
+      let imgUrl = 'https://via.placeholder.com/400';
+      try {
+        const parsed = JSON.parse(p.img);
+        imgUrl = Array.isArray(parsed) ? parsed[0] : p.img;
+      } catch(e) { imgUrl = p.img; }
+      
+      return `
+        <div class="card">
+          <img src="${imgUrl}" class="card-img" onclick="window.location.href='product.html?id=${p.id}'">
+          <div style="padding:20px;">
+            <h3 class="serif">${p.name}</h3>
+            <p style="color:var(--accent); font-weight:600; margin:10px 0;">$${p.price.toFixed(2)}</p>
+            <button class="cart-btn" style="width:100%; justify-content:center;" onclick="addToCart(${p.id})">Add to Cart</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
-      function addToCart(id) {
-        const p = products.find(x => x.id === id);
-        const exists = cart.find(x => x.id === id);
-        if (exists) exists.qty++; else cart.push({...p, qty:1});
-        updateCart();
-      }
+  function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    const exists = cart.find(x => x.id === id);
+    if (exists) exists.qty++; else cart.push({...p, qty:1});
+    updateCart();
+  }
 
-      function updateCart() {
-        const list = document.getElementById('cart-items');
-        let total = 0;
-        list.innerHTML = cart.map(item => {
-          total += (item.price * item.qty);
-          return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-            <div><b>${item.name}</b><br><small>${item.qty} x $${item.price.toFixed(2)}</small></div>
-            <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
-          </div>`;
-        }).join('');
-        document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
-        document.getElementById('cart-count').textContent = cart.reduce((a,b) => a+b.qty, 0);
-        document.getElementById('checkout-btn').disabled = cart.length === 0;
-      }
+  function updateCart() {
+    const list = document.getElementById('cart-items');
+    let total = 0;
+    list.innerHTML = cart.map(item => {
+      total += (item.price * item.qty);
+      return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+        <div><b>${item.name}</b><br><small>${item.qty} x $${item.price.toFixed(2)}</small></div>
+        <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
+      </div>`;
+    }).join('');
+    document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+    document.getElementById('cart-count').textContent = cart.reduce((a,b) => a+b.qty, 0);
+    document.getElementById('checkout-btn').disabled = cart.length === 0;
+  }
 
-      function removeFromCart(id) {
-        cart = cart.filter(x => x.id !== id);
-        updateCart();
-      }
+  function removeFromCart(id) {
+    cart = cart.filter(x => x.id !== id);
+    updateCart();
+  }
 
-      function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
-      function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('active'); }
-      function hideModals() { document.getElementById('checkout-modal').style.display = 'none'; }
+  function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
+  function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('active'); }
+  function hideModals() { document.getElementById('checkout-modal').style.display = 'none'; }
 
-      function showCheckout() {
-        document.getElementById('order-items-list').innerHTML = cart.map(i => `<div>${i.name} x ${i.qty}</div>`).join('');
-        document.getElementById('checkout-modal').style.display = 'flex';
-      }
+  function showCheckout() {
+    document.getElementById('order-items-list').innerHTML = cart.map(i => `<div>${i.name} x ${i.qty}</div>`).join('');
+    document.getElementById('checkout-modal').style.display = 'flex';
+  }
 
-      function confirmOrder() {
-        const name = document.getElementById('cust-name').value;
-        const phone = document.getElementById('cust-phone').value;
-        const addr = document.getElementById('cust-addr').value;
-        if(!name || !phone || !addr) return alert("Fill all fields");
+  function confirmOrder() {
+    const name = document.getElementById('cust-name').value;
+    const phone = document.getElementById('cust-phone').value;
+    const addr = document.getElementById('cust-addr').value;
+    if(!name || !phone || !addr) return alert("Fill all fields");
 
-        let msg = `*New Order*\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}\n\n*Items:*`;
-        cart.forEach(i => msg += `\n- ${i.name} x ${i.qty}`);
-        msg += `\n\n*Total: ${document.getElementById('cart-total').textContent}*`;
+    let msg = `*New Order*\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}\n\n*Items:*`;
+    cart.forEach(i => msg += `\n- ${i.name} x ${i.qty}`);
+    msg += `\n\n*Total: ${document.getElementById('cart-total').textContent}*`;
 
-        // MOBILE FIX: Redirect immediately, then save to DB
-        window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+    // MOBILE FIX: Redirect immediately, then save to DB
+    window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
 
-        supabaseClient.from('orders').insert([{ customer_name: name, phone: phone, address: addr, items: JSON.stringify(cart), total: parseFloat(document.getElementById('cart-total').textContent.replace('$','')) }]).then(() => {
-          cart = []; updateCart(); hideModals(); toggleCart();
-        });
-      }
+    supabaseClient.from('orders').insert([{ customer_name: name, phone: phone, address: addr, items: JSON.stringify(cart), total: parseFloat(document.getElementById('cart-total').textContent.replace('$','')) }]).then(() => {
+      cart = []; updateCart(); hideModals(); toggleCart();
+    });
+  }
 
-      fetchProducts();
-    </script>
+  fetchProducts();
+</script>
+
   </body>
 </html>
