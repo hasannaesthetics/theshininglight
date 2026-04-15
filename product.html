@@ -7,22 +7,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-      :root { --primary: #4b593e; --accent: #c5a059; --bg: #fdfcf8; --text: #2c2c2c; --white: #ffffff; }
-      body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-      .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+      :root { --primary: #4b593e; --accent: #c5a059; --bg: #fdfcf8; --text: #2c2c2c; }
+      body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height:1.6; }
+      .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
       .serif { font-family: "Playfair Display", serif; }
-      .btn { display: inline-block; background: var(--primary); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; }
+      .btn { display: inline-block; background: var(--primary); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; cursor: pointer; border:none; }
       .price { font-size: 2rem; color: var(--accent); font-weight: 600; margin: 20px 0; }
-      .img-main { width: 100%; border-radius: 15px; margin-bottom: 20px; }
-      .back-link { display: block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: 600; }
     </style>
   </head>
   <body>
     <div class="container">
-      <a href="index.html" class="back-link">← Back to Shop</a>
-      <div id="product-content">
-        <p>Loading product...</p>
-      </div>
+      <a href="index.html" style="text-decoration:none; color:var(--primary); font-weight:600;">← Back to Shop</a>
+      <div id="content" style="margin-top:30px;">Loading...</div>
     </div>
 
     <script>
@@ -31,36 +27,30 @@
       const WHATSAPP_PHONE = '6590106263';
 
       const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      const params = new URLSearchParams(window.location.search);
-      const productId = params.get('id');
+      const id = new URLSearchParams(window.location.search).get('id');
 
-      async function loadProduct() {
-        const { data, error } = await supabaseClient.from('products').select('*').eq('id', productId).single();
-        if (error || !data) {
-          document.getElementById('product-content').innerHTML = "<p>Product not found.</p>";
-          return;
-        }
+      async function load() {
+        const { data } = await supabaseClient.from('products').select('*').eq('id', id).single();
+        if (!data) return document.getElementById('content').innerHTML = "Product not found.";
 
-        const images = JSON.parse(data.img || '[]');
-        const displayImg = Array.isArray(images) ? images[0] : data.img;
+        let imgUrl = data.img;
+        try { const p = JSON.parse(data.img); if(Array.isArray(p)) imgUrl = p[0]; } catch(e) {}
 
-        document.getElementById('product-content').innerHTML = `
-          <h1 class="serif" style="font-size: 2.5rem">${data.name}</h1>
-          <img src="${displayImg}" class="img-main">
+        document.getElementById('content').innerHTML = `
+          <h1 class="serif" style="font-size:2.5rem;">${data.name}</h1>
+          <img src="${imgUrl}" style="width:100%; border-radius:15px; margin:20px 0;">
           <p class="price">$${data.price.toFixed(2)}</p>
-          <p>${data.description || 'No description available.'}</p>
-          <div style="margin-top: 30px">
-            <button class="btn" onclick="orderNow('${data.name}', ${data.price})">Order on WhatsApp</button>
-          </div>
+          <p style="margin-bottom:30px;">${data.description || ''}</p>
+          <button class="btn" onclick="order('${data.name}', ${data.price})">Order on WhatsApp</button>
         `;
       }
 
-      function orderNow(name, price) {
-        const msg = `Hi! I'm interested in purchasing:\n\n*${name}*\nPrice: $${price.toFixed(2)}\n\nPlease let me know the shipping details.`;
+      function order(name, price) {
+        const msg = `Hi! I'm interested in: *${name}* ($${price.toFixed(2)})`;
         window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
       }
 
-      if(productId) loadProduct();
+      if(id) load();
     </script>
   </body>
 </html>
