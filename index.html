@@ -113,32 +113,49 @@
 <script>
   const SUPABASE_URL = 'https://sappkfchokaixfmmsotv.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhcHBrZmNob2thaXhmbW1zb3R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MzgxMTAsImV4cCI6MjA5MTMxNDExMH0.L-qETu03IZLqEhJoEx3Jy36JSDIxBg8hjhz4SYiMZYI';
-  const WHATSAPP_PHONE = '6590106263'; // NO PLUS SIGN
+  const WHATSAPP_PHONE = '6590106263';
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   let products = [];
   let cart = [];
 
   async function fetchProducts() {
-    const { data, error } = await supabaseClient.from('products').select('*').order('id');
-    if (data) { products = data; renderProducts(); }
+    try {
+      const { data, error } = await supabaseClient.from('products').select('*').order('id');
+      if (error) throw error;
+      products = data || [];
+      renderProducts();
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      document.getElementById('product-grid').innerHTML = "<p>Unable to load collection. Please refresh.</p>";
+    }
   }
 
   function renderProducts() {
     const grid = document.getElementById('product-grid');
+    if (products.length === 0) {
+      grid.innerHTML = "<p style='grid-column: 1/-1;'>No products available yet.</p>";
+      return;
+    }
+
     grid.innerHTML = products.map(p => {
       let imgUrl = 'https://via.placeholder.com/400';
       try {
-        const parsed = JSON.parse(p.img);
-        imgUrl = Array.isArray(parsed) ? parsed[0] : p.img;
-      } catch(e) { imgUrl = p.img; }
+        // Safe check for JSON images or string URLs
+        if (p.img && p.img.startsWith('[')) {
+          const parsed = JSON.parse(p.img);
+          imgUrl = Array.isArray(parsed) ? parsed[0] : p.img;
+        } else {
+          imgUrl = p.img || imgUrl;
+        }
+      } catch(e) { imgUrl = p.img || imgUrl; }
       
       return `
         <div class="card">
-          <img src="${imgUrl}" class="card-img" onclick="window.location.href='product.html?id=${p.id}'">
+          <img src="${imgUrl}" class="card-img" onclick="window.location.href='product.html?id=${p.id}'" alt="${p.name}">
           <div style="padding:20px;">
-            <h3 class="serif">${p.name}</h3>
-            <p style="color:var(--accent); font-weight:600; margin:10px 0;">$${p.price.toFixed(2)}</p>
+            <h3 class="serif" style="font-size:1.1rem; min-height:2.4em; display:flex; align-items:center; justify-content:center;">${p.name}</h3>
+            <p style="color:var(--accent); font-weight:600; margin:10px 0; font-size:1.2rem;">$${Number(p.price).toFixed(2)}</p>
             <button class="cart-btn" style="width:100%; justify-content:center;" onclick="addToCart(${p.id})">Add to Cart</button>
           </div>
         </div>
@@ -151,16 +168,18 @@
     const exists = cart.find(x => x.id === id);
     if (exists) exists.qty++; else cart.push({...p, qty:1});
     updateCart();
+    // Auto-open cart only on desktop
+    if(window.innerWidth > 768) document.getElementById('cart-sidebar').classList.add('active');
   }
 
   function updateCart() {
     const list = document.getElementById('cart-items');
     let total = 0;
     list.innerHTML = cart.map(item => {
-      total += (item.price * item.qty);
-      return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-        <div><b>${item.name}</b><br><small>${item.qty} x $${item.price.toFixed(2)}</small></div>
-        <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
+      total += (Number(item.price) * item.qty);
+      return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px; text-align: left;">
+        <div><b>${item.name}</b><br><small>${item.qty} x $${Number(item.price).toFixed(2)}</small></div>
+        <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:#d4533e; cursor:pointer; font-size:1.2rem;">✕</button>
       </div>`;
     }).join('');
     document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
@@ -178,30 +197,43 @@
   function hideModals() { document.getElementById('checkout-modal').style.display = 'none'; }
 
   function showCheckout() {
-    document.getElementById('order-items-list').innerHTML = cart.map(i => `<div>${i.name} x ${i.qty}</div>`).join('');
+    document.getElementById('order-items-list').innerHTML = cart.map(i => `<div>• ${i.name} x ${i.qty}</div>`).join('');
     document.getElementById('checkout-modal').style.display = 'flex';
   }
 
   function confirmOrder() {
-    const name = document.getElementById('cust-name').value;
-    const phone = document.getElementById('cust-phone').value;
-    const addr = document.getElementById('cust-addr').value;
-    if(!name || !phone || !addr) return alert("Fill all fields");
+    const name = document.getElementById('cust-name').value.trim();
+    const phone = document.getElementById('cust-phone').value.trim();
+    const addr = document.getElementById('cust-addr').value.trim();
+    
+    if(!name || !phone || !addr) return alert("Please fill in all fields.");
 
-    let msg = `*New Order*\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}\n\n*Items:*`;
+    let msg = `*New Order from The Shining Light*\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Address:* ${addr}\n\n*Items:*`;
     cart.forEach(i => msg += `\n- ${i.name} x ${i.qty}`);
-    msg += `\n\n*Total: ${document.getElementById('cart-total').textContent}*`;
+    msg += `\n\n*Total:* ${document.getElementById('cart-total').textContent}`;
 
-    // MOBILE FIX: Redirect immediately, then save to DB
+    // 1. Redirect immediately
     window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
 
-    supabaseClient.from('orders').insert([{ customer_name: name, phone: phone, address: addr, items: JSON.stringify(cart), total: parseFloat(document.getElementById('cart-total').textContent.replace('$','')) }]).then(() => {
-      cart = []; updateCart(); hideModals(); toggleCart();
+    // 2. Clear UI immediately (don't wait for database)
+    const orderData = { 
+      customer_name: name, 
+      phone: phone, 
+      address: addr, 
+      items: JSON.stringify(cart), 
+      total: parseFloat(document.getElementById('cart-total').textContent.replace('$','')) 
+    };
+
+    cart = [];
+    updateCart();
+    hideModals();
+    toggleCart();
+
+    // 3. Save to database in the background
+    supabaseClient.from('orders').insert([orderData]).then(({error}) => {
+      if(error) console.error("DB Save Error:", error);
     });
   }
 
   fetchProducts();
 </script>
-
-  </body>
-</html>
