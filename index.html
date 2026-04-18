@@ -246,6 +246,28 @@ nav{max-width:1400px;margin:0 auto;padding:0 2.5rem;height:76px;display:flex;ali
 .product-modal-desc{font-size:0.88rem;color:var(--muted);line-height:1.75;font-weight:300;flex:1}
 .product-modal-actions{margin-top:1.5rem;display:flex;flex-direction:column;gap:0.8rem}
 
+/* MOBILE PRODUCT BOTTOM SHEET */
+@media(max-width:600px){
+  #product-modal{align-items:flex-end;padding:0}
+  #product-modal .modal{
+    max-width:100%;width:100%;border-radius:24px 24px 0 0;
+    max-height:92vh;overflow-y:auto;
+    animation:slideUpSheet 0.4s var(--ease);
+  }
+  @keyframes slideUpSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .product-modal-grid{grid-template-columns:1fr}
+  .product-modal-img{
+    aspect-ratio:4/3;border-radius:0;
+    max-height:260px;
+  }
+  .product-modal-img img{width:100%;height:100%;object-fit:cover}
+  .product-modal-info{padding:1.5rem}
+  .product-modal-name{font-size:1.4rem}
+  .product-modal-price{font-size:1.7rem}
+  .product-modal-actions{flex-direction:row;gap:0.6rem}
+  .product-modal-actions .btn-primary,.product-modal-actions .btn-secondary{flex:1;justify-content:center;padding:0.75rem 0.5rem;font-size:0.7rem}
+}
+
 /* ADMIN */
 #admin-panel{display:none;padding:7rem 2.5rem 4rem;background:var(--cream);min-height:100vh}
 .admin-wrap{max-width:1200px;margin:0 auto}
@@ -293,7 +315,7 @@ footer{background:var(--text);color:white;padding:5rem 2.5rem 2rem}
 
 /* RESPONSIVE */
 @media(max-width:1100px){.hero-right{display:none}.footer-top{grid-template-columns:1fr 1fr}.about-wrap{grid-template-columns:1fr;gap:3rem}}
-@media(max-width:768px){nav{padding:0 1.5rem}.nav-links{display:none}.hamburger{display:flex}#shop{padding:4rem 1.5rem}.cart-sidebar{width:100%;right:-100%}.hero-inner{padding:100px 1.5rem 40px}#about{padding:5rem 1.5rem}footer{padding:4rem 1.5rem 2rem}.footer-top{grid-template-columns:1fr;gap:2rem}.product-modal-grid{grid-template-columns:1fr}.product-modal-img{border-radius:24px 24px 0 0}.admin-form-grid{grid-template-columns:1fr}.hero-stats-inner{gap:1.5rem;overflow-x:auto}}
+@media(max-width:768px){nav{padding:0 1.5rem}.nav-links{display:none}.hamburger{display:flex}#shop{padding:4rem 1.5rem}.cart-sidebar{width:100%;right:-100%}.hero-inner{padding:100px 1.5rem 40px}#about{padding:5rem 1.5rem}footer{padding:4rem 1.5rem 2rem}.footer-top{grid-template-columns:1fr;gap:2rem}.admin-form-grid{grid-template-columns:1fr}.hero-stats-inner{gap:1.5rem;overflow-x:auto}}
 @media(max-width:480px){.hero-actions{flex-direction:column}.btn-primary,.btn-secondary{width:100%;justify-content:center}}
 </style>
 </head>
@@ -503,8 +525,8 @@ footer{background:var(--text);color:white;padding:5rem 2.5rem 2rem}
 
 <!-- PRODUCT MODAL -->
 <div class="modal-overlay" id="product-modal">
-  <div class="modal" style="max-width:700px;padding:0;overflow:hidden">
-    <div class="product-modal-grid" id="product-modal-content"></div>
+  <div class="modal" style="max-width:700px;padding:0;overflow:hidden;position:relative">
+    <div id="product-modal-content" style="position:relative"></div>
   </div>
 </div>
 
@@ -659,19 +681,45 @@ function openProductModal(id){
   const p=allProducts.find(x=>x.id===id);if(!p)return;
   const img=parseImg(p.img);
   const stockTxt=p.stock<=0?'Sold out':p.stock<=3?`Only ${p.stock} left`:`${p.stock} in stock`;
+  // Wrap grid + floating close btn in a fragment
+  const pm=document.getElementById('product-modal');
+  // Move close btn to be a direct child of the modal wrapper div, not inside grid
   document.getElementById('product-modal-content').innerHTML=`
-    <div class="product-modal-img">${img?`<img src="${esc(img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:4rem">🕌</div>'}</div>
-    <div class="product-modal-info">
-      <button class="modal-close" style="position:absolute;top:1rem;right:1rem" onclick="closeModals()">✕</button>
-      <div class="product-modal-name">${esc(p.name)}</div>
-      <div class="product-modal-price">$${parseFloat(p.price).toFixed(2)}</div>
-      <div class="product-modal-stock">${stockTxt}</div>
-      <div class="product-modal-desc">${esc(p.description||'A beautiful piece from our collection.')}</div>
-      <div class="product-modal-actions">
-        <button class="btn-primary" style="justify-content:center" onclick="addToCart(${p.id});closeModals()" ${p.stock<=0?'disabled':''}>${p.stock<=0?'Sold Out':'Add to Cart'}</button>
-        <button class="btn-secondary" style="justify-content:center" onclick="closeModals()">Close</button>
+    <button class="modal-close" style="position:absolute;top:1rem;right:1rem;z-index:10;background:rgba(255,255,255,0.95);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15)" onclick="closeModals()">✕</button>
+    <div class="mobile-drag-handle" style="display:none;width:40px;height:4px;background:rgba(0,0,0,0.15);border-radius:2px;margin:10px auto 0;position:relative;z-index:10"></div>
+    <div class="product-modal-grid" style="width:100%">
+      <div class="product-modal-img">${img?`<img src="${esc(img)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:4rem">🕌</div>'}</div>
+      <div class="product-modal-info">
+        <div class="product-modal-name">${esc(p.name)}</div>
+        <div class="product-modal-price">$${parseFloat(p.price).toFixed(2)}</div>
+        <div class="product-modal-stock">${stockTxt}</div>
+        <div class="product-modal-desc">${esc(p.description||'A beautiful piece from our collection.')}</div>
+        <div class="product-modal-actions">
+          <button class="btn-primary" style="justify-content:center" onclick="addToCart(${p.id});closeModals()" ${p.stock<=0?'disabled':''}>${p.stock<=0?'Sold Out':'Add to Cart'}</button>
+          <button class="btn-secondary" style="justify-content:center" onclick="closeModals()">Close</button>
+        </div>
       </div>
     </div>`;
+  // Show drag handle on mobile
+  if(window.innerWidth<=600){
+    const handle=document.querySelector('.mobile-drag-handle');
+    if(handle)handle.style.display='block';
+    // Swipe down to close
+    const modal=document.querySelector('#product-modal .modal');
+    let startY=0,dragging=false;
+    modal.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;dragging=true},{passive:true});
+    modal.addEventListener('touchmove',e=>{
+      if(!dragging)return;
+      const dy=e.touches[0].clientY-startY;
+      if(dy>0)modal.style.transform=`translateY(${dy}px)`;
+    },{passive:true});
+    modal.addEventListener('touchend',e=>{
+      const dy=e.changedTouches[0].clientY-startY;
+      if(dy>80){closeModals();}
+      modal.style.transform='';
+      dragging=false;
+    },{passive:true});
+  }
   document.getElementById('product-modal').classList.add('open');
 }
 
@@ -755,7 +803,12 @@ async function confirmOrder(){
 }
 
 function toggleCart(){document.getElementById('cart-sidebar').classList.toggle('open');document.getElementById('cart-overlay').classList.toggle('open')}
-function closeModals(){document.getElementById('checkout-modal').classList.remove('open');document.getElementById('product-modal').classList.remove('open')}
+function closeModals(){
+  document.getElementById('checkout-modal').classList.remove('open');
+  document.getElementById('product-modal').classList.remove('open');
+  const m=document.querySelector('#product-modal .modal');
+  if(m)m.style.transform='';
+}
 function toggleSearch(){const d=document.getElementById('search-drop');d.classList.toggle('open');if(d.classList.contains('open'))setTimeout(()=>document.getElementById('search-input').focus(),200)}
 function toggleMobile(){document.getElementById('mobile-menu').classList.toggle('open')}
 function showError(msg){const el=document.getElementById('error-banner');el.textContent=msg;el.classList.add('show')}
